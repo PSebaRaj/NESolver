@@ -1,4 +1,4 @@
-# Nash Equilibria Solver
+# Nash Equilibria Solver (WIP)
 
 ## Description
 
