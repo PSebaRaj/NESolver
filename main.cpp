@@ -31,11 +31,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else {
-			std::cout << "Could not open the row payoff file\n";
+			std::cerr << "Could not open the row payoff file" << std::endl;;
 		}
 
 		// print contents of payoff matrix
-		std::cout << "Payoff matrix of ROW player:\n";
+		std::cout << "Payoff matrix of ROW player:" << std::endl;;
 		for(int i=0;i < row_player_payoffs.size(); i++) {
 			for(int j=0; j < row_player_payoffs[i].size(); j++) {
 				std::cout << row_player_payoffs[i][j] << " ";
@@ -66,11 +66,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else {
-			std::cout << "Could not open the column payoff file\n";
+			std::cerr << "Could not open the column payoff file" << std::endl;;
 		}
 
 		// print contents of payoff matrix
-		std::cout << "Payoff matrix of COLUNN player:\n";
+		std::cout << "Payoff matrix of COLUNN player:"<< std::endl;;
 		for(int i=0;i < column_player_payoffs.size(); i++) {
 			for(int j=0; j < column_player_payoffs[i].size(); j++) {
 				std::cout << column_player_payoffs[i][j] << " ";
@@ -82,9 +82,61 @@ int main(int argc, char *argv[]) {
 		// now find the nash equilibria
 
 		return 0;
+
 	} else if (argc == 1) {
-		// IMPLEMENT
+		// If the user wants to entire both payoff matrices NOW
+		int num_rows, num_cols;
+		std::cout << "How many pure strategies does the row player have?" << std::endl;
+		std::cin  >> num_rows;
+		std::cout << "How many pure strategies does the column player have" << std::endl;
+		std::cin  >> num_cols;
+
+
+		// ROW PLAYER
+		std::cout << "Enter values of the row player's payoff matrix: " << std::endl;
+
+		std::vector<std::vector<double> > row_player_payoffs( num_rows , std::vector<double> (num_cols, 0));
+
+		for (int i = 0; i < num_rows; i++) {
+			for (int j = 0; j < num_cols; j++) {
+					std::cout << "row_player_payoffs[" << i << "][" << j << "]" << std::endl;
+					std::cin >> row_player_payoffs[i][j];
+			}
+		}
+
+		// COLUMN PLAYER
+		std::cout << "Enter values of the column player's payoff matrix: " << std::endl;
+
+		std::vector<std::vector<double> > column_player_payoffs( num_rows , std::vector<double> (num_cols, 0));
+		for (int i = 0; i < num_rows; i++) {
+			for (int j = 0; j < num_cols; j++) {
+					std::cout << "column_player_payoffs[" << i << "][" << j << "]" << std::endl;
+					std::cin >> column_player_payoffs[i][j];
+			}
+		}
+
+		// print contents of payoff matrix
+		std::cout << "Payoff matrix of ROW player:" << std::endl;;
+		for(int i=0;i < row_player_payoffs.size(); i++) {
+			for(int j=0; j < row_player_payoffs[i].size(); j++) {
+				std::cout << row_player_payoffs[i][j] << " ";
+			}
+
+			std::cout << "\n";
+		}
+		std::cout << "Payoff matrix of COLUNN player:"<< std::endl;;
+		for(int i=0;i < column_player_payoffs.size(); i++) {
+			for(int j=0; j < column_player_payoffs[i].size(); j++) {
+				std::cout << column_player_payoffs[i][j] << " ";
+			}
+
+			std::cout << "\n";
+		}
+
+		// now find the nash equilibria
+
 		return 0;
+
 	} else {
 		// ERROR
 		return 0;
