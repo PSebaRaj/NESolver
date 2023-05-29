@@ -53,7 +53,7 @@ Eigen::MatrixXd Nash_2Player_NF::make_nf_table(Eigen::MatrixXd &M) {
     Eigen::MatrixXd ones = Eigen::MatrixXd::Ones(m, 1);
     Eigen::MatrixXd C(m, m+n+1);
 
-    C<< M,I, ones;
+    C << M,I, ones;
 
     return C;
 
