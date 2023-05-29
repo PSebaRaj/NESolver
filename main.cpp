@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 
+#include "Nash_2Player_NF.h"
+
 int main(int argc, char *argv[]) {
 	if (argc ==  3) {
 		// ran with CSVs of row and column player payoffs
@@ -12,8 +14,8 @@ int main(int argc, char *argv[]) {
 		// ROW PLAYER
 		std::string r_fname = argv[1];
 
-		std::vector<std::vector<float> > row_player_payoffs;
-		std::vector<float> r_row;
+		std::vector<std::vector<double> > row_player_payoffs;
+		std::vector<double> r_row;
 		std::string r_line, r_word;
 
 		std::fstream r_file (r_fname, std::ios::in);
@@ -34,21 +36,11 @@ int main(int argc, char *argv[]) {
 			std::cerr << "Could not open the row payoff file" << std::endl;;
 		}
 
-		// print contents of payoff matrix
-		std::cout << "Payoff matrix of ROW player:" << std::endl;;
-		for(int i=0;i < row_player_payoffs.size(); i++) {
-			for(int j=0; j < row_player_payoffs[i].size(); j++) {
-				std::cout << row_player_payoffs[i][j] << " ";
-			}
-
-			std::cout << "\n";
-		}
-
 		// COLUMN PLAYER
 		std::string c_fname = argv[2];
 
-		std::vector<std::vector<float> > column_player_payoffs;
-		std::vector<float> c_row;
+		std::vector<std::vector<double> > column_player_payoffs;
+		std::vector<double> c_row;
 		std::string c_line, c_word;
 
 		std::fstream c_file (c_fname, std::ios::in);
@@ -66,20 +58,12 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else {
-			std::cerr << "Could not open the column payoff file" << std::endl;;
-		}
-
-		// print contents of payoff matrix
-		std::cout << "Payoff matrix of COLUNN player:"<< std::endl;;
-		for(int i=0;i < column_player_payoffs.size(); i++) {
-			for(int j=0; j < column_player_payoffs[i].size(); j++) {
-				std::cout << column_player_payoffs[i][j] << " ";
-			}
-
-			std::cout << "\n";
+			std::cerr << "Could not open the column payoff file" << std::endl;
 		}
 
 		// now find the nash equilibria
+        Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
+        NG.print_ne_support();
 
 		return 0;
 
@@ -115,25 +99,9 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		// print contents of payoff matrix
-		std::cout << "Payoff matrix of ROW player:" << std::endl;;
-		for(int i=0;i < row_player_payoffs.size(); i++) {
-			for(int j=0; j < row_player_payoffs[i].size(); j++) {
-				std::cout << row_player_payoffs[i][j] << " ";
-			}
-
-			std::cout << "\n";
-		}
-		std::cout << "Payoff matrix of COLUNN player:"<< std::endl;;
-		for(int i=0;i < column_player_payoffs.size(); i++) {
-			for(int j=0; j < column_player_payoffs[i].size(); j++) {
-				std::cout << column_player_payoffs[i][j] << " ";
-			}
-
-			std::cout << "\n";
-		}
-
 		// now find the nash equilibria
+        Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
+        NG.print_ne_support();
 
 		return 0;
 

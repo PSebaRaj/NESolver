@@ -6,7 +6,7 @@
 ### Fetching Dependencies
 - Install CMake, if not already done so
 - Install Eigen by running `chmod +x install_eigen.sh` and then `./install_eigen.sh`
-- `cmake .`
+- `cmake CMakeLists.txt`
 - `make`
 
 ## Running

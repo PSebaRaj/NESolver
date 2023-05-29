@@ -7,8 +7,8 @@ set(CMAKE_CXX_FLAGS "-O2")
 include_directories(libs/Eigen)
 
 add_executable(NESOLVER
-        Nash2x2.cpp
-        Nash2x2.h
+		Nash_2Player_NF.cpp
+		Nash_2Player_NF.h
         main.cpp)
 
 find_package(Python COMPONENTS Development)
