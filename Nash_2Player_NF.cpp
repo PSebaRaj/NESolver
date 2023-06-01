@@ -1,9 +1,5 @@
 #include "Nash_2Player_NF.h"
 
-Nash_2Player_NF::Nash_2Player_NF() {
-        // Default constructor
-}
-
 Nash_2Player_NF::Nash_2Player_NF(std::vector<std::vector<double> > row_player_payoff, std::vector<std::vector<double> > col_player_payoff) {
 
         const Eigen::MatrixXd payoff_matrix_1 = this->convert_to_matrix(row_player_payoff);
@@ -46,14 +42,15 @@ Eigen::MatrixXd Nash_2Player_NF::convert_to_matrix(std::vector<std::vector<doubl
 
 
 Eigen::MatrixXd Nash_2Player_NF::make_nf_table(Eigen::MatrixXd &M) {
+
     int m = M.rows();
     int n = M.cols();
 
-    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(m,m);
-    Eigen::MatrixXd ones = Eigen::MatrixXd::Ones(m, 1);
-    Eigen::MatrixXd C(m, m+n+1);
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(m,m); // m x m identity matrix
+    Eigen::MatrixXd ones = Eigen::MatrixXd::Ones(m, 1); // m x 1 one's vector
+    Eigen::MatrixXd C(m, m+n+1); // holds M, I, and ones matrices concat. on one another
 
-    C << M,I, ones;
+    C << M, I, ones;
 
     return C;
 
@@ -61,8 +58,12 @@ Eigen::MatrixXd Nash_2Player_NF::make_nf_table(Eigen::MatrixXd &M) {
 
 
 Eigen::Index Nash_2Player_NF::find_pivot_row(const Eigen::MatrixXd& nf_table, int column_index) {
+
     Eigen::Index id;
     Eigen::VectorXd ratios = nf_table.col(column_index).array() / nf_table.col(nf_table.cols() - 1).array();
+
+	// pivot on max number... max num if most beneficial w/ both (+) and (-) payoffs
+	// remember, we are not using minimax. so this works for strictly positive/negative games AND zero sum games
     ratios.array().maxCoeff(&id);
     return id;
 }
@@ -76,10 +77,12 @@ std::vector<int> Nash_2Player_NF::non_basic_variables(const Eigen::MatrixXd &nf_
     for (int i = 0; i < columns.rows(); i++) {
         Eigen::VectorXd vec_row = columns.row(i).array();
         Eigen::SparseMatrix<double> sparse_vec(vec_row.sparseView());
+
         if (sparse_vec.nonZeros() != 1) {
             non_basic_vars.push_back(i);
         }
     }
+
     return non_basic_vars;
 }
 
@@ -111,6 +114,7 @@ std::vector<int> Nash_2Player_NF::pivot_nf_table(Eigen::MatrixXd &nf_table, int 
 
 
 Eigen::MatrixXd Nash_2Player_NF::shift_nf_table(Eigen::MatrixXd nf_table, int num_rows, int num_cols) {
+
     Eigen::MatrixXd shifted_nf_table(num_rows, num_cols);
 
     for (int i = 0; i < num_rows; i++) {
@@ -165,6 +169,7 @@ bool Nash_2Player_NF::solve_indifference_cond(const PayoffMatrix& A, Eigen::Vect
     const int m = A.rows();
     const int n = A.cols();
     const int rows_m = rows.size();
+
     Eigen::MatrixXd M(m, n);
     std::vector<double> rows_rotated(rows);
 
@@ -226,6 +231,7 @@ SupportPairs Nash_2Player_NF::potential_support_pairs(bool non_degenerate) {
             result.emplace_back(support1, support2);
         }
     }
+
     return result;
 }
 
@@ -334,12 +340,30 @@ void Nash_2Player_NF::print_ne_support() {
         }
     }
 
-    if(num_eq % 2 == 0){
+	Eigen::IOFormat CleanFmt(4, 0, ", ", "\n", "[", "]");
+
+    if(num_eq == 0){
+        std::cerr << "==========================================" << std::endl;
+        std::cerr << "= NO NASH EQUILIBRIA EXIST FOR THIS GAME =" << std::endl;
+        std::cerr << "==========================================" << std::endl;
+
+    } else if(num_eq % 2 == 0){
         std::cerr << "==========================================" << std::endl;
         std::cerr << "======== ERROR : DEGENERATE GAME =========" << std::endl;
         std::cerr << "==========================================" << std::endl;
 
-    }else{
+		std::cout << "FOUND " << nash_equilibrias.size() << " EQUILIBRIA FOR THIS GAME" << std::endl;
+
+        for(auto& eq : nash_equilibrias){
+			std::cout << std::endl;
+            std::cout << "======== (NOT NASH!!!) EQUILIBRIUM =======" << std::endl;
+			std::cout << "================ STRATEGIES ==============" << std::endl;
+            std::cout << "Row Player    (Top to Bottom) : [" << eq.first.transpose().format(CleanFmt) << std::endl;
+            std::cout << "Column Player (Left to Right) : [" << eq.second.transpose().format(CleanFmt) << std::endl;
+            std::cout << "==========================================" << std::endl;
+		}
+
+    } else{
 		std::cout << std::endl;
 		std::cout << "FOUND " << nash_equilibrias.size() << " NASH EQUILIBRIA FOR THIS GAME" << std::endl;
 
@@ -347,8 +371,8 @@ void Nash_2Player_NF::print_ne_support() {
 			std::cout << std::endl;
             std::cout << "============= NASH EQUILIBRIUM ===========" << std::endl;
 			std::cout << "================ STRATEGIES ==============" << std::endl;
-            std::cout << "Row Player    (Top to Bottom) : [" << eq.first.transpose()   << "]" << std::endl;
-            std::cout << "Column Player (Left to Right) : [" << eq.second.transpose() << "]" << std::endl;
+            std::cout << "Row Player    (Top to Bottom) : " << eq.first.transpose().format(CleanFmt) << std::endl;
+            std::cout << "Column Player (Left to Right) : " << eq.second.transpose().format(CleanFmt) << std::endl;
             std::cout << "==========================================" << std::endl;
         }
 

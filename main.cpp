@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 		// now find the nash equilibria
         Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
-        NG.print_ne_support();
+        NG.print_ne_support(); // and print the results
 
 		return 0;
 
@@ -226,6 +226,7 @@ int main(int argc, char *argv[]) {
 			// COLUMN PLAYER
 			std::vector<std::vector<double> > column_player_payoffs = get_zero_sum_payoffs(row_player_payoffs);
 
+			// now find the nash equilibria
 			Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
             NG.print_ne_support();
 
@@ -239,6 +240,7 @@ int main(int argc, char *argv[]) {
 			// COLUMN PLAYER
 			std::vector<std::vector<double> > column_player_payoffs = get_symmetric_payoffs(row_player_payoffs);
 
+			// now find the nash equilibria
 			Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
             NG.print_ne_support();
 
@@ -279,6 +281,7 @@ int main(int argc, char *argv[]) {
 			// COLUMN PLAYER
 			std::vector<std::vector<double> > column_player_payoffs = get_zero_sum_payoffs(row_player_payoffs);
 
+			// now find the nash equilibria
 			Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
             NG.print_ne_support();
 
@@ -295,6 +298,7 @@ int main(int argc, char *argv[]) {
 			// COLUMN PLAYER
 			std::vector<std::vector<double> > column_player_payoffs = get_symmetric_payoffs(row_player_payoffs);
 
+			// now find the nash equilibria
 			Nash_2Player_NF NG(row_player_payoffs, column_player_payoffs);
             NG.print_ne_support();
 
@@ -306,7 +310,7 @@ int main(int argc, char *argv[]) {
 
 		}
 	} else {
-		// ERROR
+		// Invalid arg count!
 		return 1;
 	}
 
